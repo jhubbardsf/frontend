@@ -1,0 +1,66 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+Description: Rift Exchange Frontend Development
+Globs: src/**/*.tsx, src/**/*.ts, src/components/**/*.*, src/features/**/*.*
+---
+
+# Rift Exchange Frontend Project
+
+## Current Development Focus
+We are implementing enhancements to the Rift Exchange frontend with a focus on UI polish, wallet integration, and compliance features.
+
+## Key Features Being Implemented
+
+### 1. Asset Selector Styling
+- Match the asset selector UI exactly to the Jumper interface design
+- Consider pulling components directly from Jumper's open source repository if compatible
+- Ensure consistent styling, animations, and behavior with the reference implementation
+- Pay special attention to hover states, selection indicators, and asset icons/logos
+
+### 2. Wallet Integration
+- Replace the current Rainbow/WalletConnect implementation with Reown AppKit integration
+- Follow Reown documentation at https://reown.com/appkit for proper implementation
+- Ensure wallet connection state properly persists across sessions where appropriate
+- Implement proper error handling for connection failures
+
+### 3. Compliance Implementation
+- Add Chainalysis/TRM OFAC compliance screening to all transactions
+- Implement geoblocking for sanctioned regions:
+  - North Korea
+  - Iran
+  - Other US-sanctioned regions
+- Add address screening to block blacklisted ETH addresses on wallet connection
+- Implement BTC address validation to block sanctioned addresses when pasted
+- All compliance checks should provide appropriate user feedback without exposing screening details
+
+## Code Structure and Standards
+
+### Components
+- Use TypeScript for all new components
+- Follow existing project naming conventions
+- Create reusable components for compliance messaging
+
+### State Management
+- Use Zustand for state management throughout the application
+- Improve the current Zustand implementation where possible
+- Ensure proper loading, error, and success states are handled in store
+- Keep store logic separated by domain (wallet state, transaction state, etc.)
+
+### Styling
+- Use project's existing CSS/styling approach (CSS modules, styled-components, etc.)
+- Maintain responsive design across all screen sizes
+- Ensure accessibility standards are maintained
+
+## Dependencies and APIs
+- Reown AppKit for wallet integration
+- Chainalysis/TRM APIs for compliance checking
+- Geolocation service for regional restrictions
+
+## File References
+@file ../src/components/AssetSelector.tsx
+@file ../src/hooks/useWallet.ts
+@file ../src/services/compliance.ts

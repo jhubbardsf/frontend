@@ -1,0 +1,24 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Description: Shared frontend context for all Cursor queries
+
+Framework: Next.js (Pages Router)
+Libraries: Chakra UI, Zustand, Wagmi, RainbowKit (currently), React Query, Ethers.js
+Store location: src/store.ts (Zustand single global store)
+Key Zustand state slices:
+- User/Wallet state: userEthAddress, ethersRpcProvider, etc.
+- Swap state: depositMode, selectedInputAsset, btcOutputAmount, etc.
+- UI state: currencyModalTitle, deposit/withdraw modals, etc.
+
+Project Structure:
+- Pages: src/pages (index, activity, swap dynamic route, offline fallback)
+- Components: src/components (by feature: swap, deposit, activity, other)
+- Utilities: src/utils (colors.ts, constants.ts, helpers)
+- Hooks: src/hooks (useWindowSize, custom hooks)
+- Blockchain ABIs: src/abis (RiftExchange.json, etc.)
+- Theme: src/theme.ts (Chakra UI customization)
+
+Routing via Next.js Link/useRouter, global state via Zustand, blockchain via Wagmi/Ethers.

@@ -1,0 +1,43 @@
+---
+description: Applies when editing wallet connect logic
+globs: 
+alwaysApply: false
+---
+Description: Replace RainbowKit with Reown AppKit for wallet connections
+
+Installation:
+```sh
+npm install @web3modal/wagmi @web3modal/wagmi-react
+```
+
+Setup (src/pages/_app.tsx):
+```tsx
+import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
+import { base } from 'wagmi/chains';
+
+const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
+const chains = [base];
+
+const wagmiConfig = defaultWagmiConfig({ projectId, chains, appName: 'Rift' });
+
+if (typeof window !== 'undefined') {
+  createWeb3Modal({ projectId, wagmiConfig });
+}
+
+// App provider wrap:
+<WagmiConfig config={wagmiConfig}>
+  <QueryClientProvider client={queryClient}>
+    <ChakraProvider theme={theme}>
+      <Component {...pageProps} />
+    </ChakraProvider>
+  </QueryClientProvider>
+</WagmiConfig>
+```
+
+Usage (`<w3m-button>` component):
+- Replace RainbowKit ConnectButton with `<w3m-button></w3m-button>`
+- Add TS declaration if needed.
+
+Handle previous `openConnectModal()`:
+- Prefer user interaction with `<w3m-button>`
+- Programmatic open via Web3Modal.open() if absolutely necessary.

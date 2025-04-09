@@ -1,0 +1,18 @@
+---
+description: Applies when editing the asset selection UI
+globs: 
+alwaysApply: false
+---
+Description: Style asset selector modal like Jumper.exchange
+
+Styling Guidelines:
+- Modal: Centered, clearly titled, dark background, rounded corners (~20px).
+- Search bar at top: Placeholder "Search asset...".
+- Scrollable asset list, hover states (gray highlight), rounded corners, spacing (~12px gap).
+- Asset entry: Flex layout with icon, token symbol bold, secondary description smaller font.
+- Selected asset: Highlight background, checkmark or subtle indicator.
+- Coming soon assets: Grayed out, non-clickable.
+
+Functional Logic Preservation:
+- Clicking asset updates Zustand state (`setDepositMode`), closes modal.
+- Maintain dynamic title context ('send', 'receive', 'deposit').

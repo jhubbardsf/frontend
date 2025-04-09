@@ -1,0 +1,42 @@
+---
+description: Applies when working on compliance features (address validation, geo-blocking, geoIP bocking, OFAC)
+globs: 
+alwaysApply: false
+---
+Description: Implement OFAC geo-blocking and sanctioned address blocking
+
+Geo-blocking via Next.js Middleware:
+```ts
+// middleware.ts
+import { NextResponse } from 'next/server';
+
+const BLOCKED_COUNTRIES = ['CU', 'IR', 'SY', 'KP', 'RU'];
+
+export function middleware(request) {
+  const country = request.geo?.country;
+  if (BLOCKED_COUNTRIES.includes(country)) {
+    return NextResponse.redirect(new URL('/blocked', request.url));
+  }
+}
+```
+
+Sanctioned Address Blocking:
+- Maintain blocked addresses in Set:
+```ts
+export const BLOCKED_ADDRESSES = new Set(['0x1234...abcd', '0xdead...beef']);
+
+export const isAddressSanctioned = (address: string) =>
+  BLOCKED_ADDRESSES.has(address.toLowerCase());
+```
+
+Check at swap initiation or wallet connect:
+```ts
+if (isAddressSanctioned(userAddress)) {
+  toast.error('This address is blocked from using the service.');
+  return;
+}
+```
+
+User Experience:
+- Clearly inform via redirect (`/blocked`) or toast/error message.
+- Prevent further interaction if sanctioned.

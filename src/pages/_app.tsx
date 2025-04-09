@@ -3,15 +3,15 @@ import theme from '../theme';
 import Head from 'next/head';
 import { useEffect, useState, useRef } from 'react';
 import { useStore } from '../store';
-import { AppProps } from 'next/app';
+import type { AppProps } from 'next/app';
 import '../styles/custom-fonts.css';
-import testData from '../testData.json';
-import assets from '../assets.json';
+import testData from '../json/testData.json';
+import assets from '../json/assets.json';
 import { MdClose } from 'react-icons/md';
 import { colors } from '../utils/colors';
 import toast, { ToastBar, Toaster } from 'react-hot-toast';
 import '@rainbow-me/rainbowkit/styles.css';
-import { WagmiProvider } from 'wagmi';
+import { WagmiProvider, http } from 'wagmi';
 import { mainnet, holesky, arbitrumSepolia, arbitrum, base } from 'wagmi/chains';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { getDefaultConfig, RainbowKitProvider, darkTheme, Theme } from '@rainbow-me/rainbowkit';
@@ -19,9 +19,10 @@ import { ContractDataProvider } from '../components/providers/ContractDataProvid
 import { RiftApi } from '../proxy-wallet/rift';
 import useWindowSize from '../hooks/useWindowSize';
 import { FONT_FAMILIES } from '../utils/font';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { DEVNET_BASE_RPC_URL } from '@/utils/constants';
 
-// Define the custom Anvil chain
-const anvilChain = {
+export const anvilChain = {
     id: 1337,
     name: 'Anvil Testnet',
     network: 'anvil',
@@ -32,11 +33,11 @@ const anvilChain = {
     },
     rpcUrls: {
         default: {
-            http: ['http://localhost:50101'], // Replace with your Anvil testnet RPC URL
+            http: [DEVNET_BASE_RPC_URL], // Replace with your Anvil testnet RPC URL
         },
     },
     blockExplorers: {
-        default: { name: 'Anvil Explorer', url: 'http://localhost:50101' }, // Replace with your block explorer URL if available
+        default: { name: 'Anvil Explorer', url: DEVNET_BASE_RPC_URL }, // Replace with your block explorer URL if available
     },
     testnet: true,
 };
@@ -45,8 +46,8 @@ const config = getDefaultConfig({
     appName: 'My RainbowKit App',
     projectId: 'YOUR_PROJECT_ID',
     //@ts-ignore
-    chains: [base],
-    ssr: true, // If your dApp uses server side rendering (SSR)
+    chains: [anvilChain, base],
+    ssr: true, // If your dApp uses server side rendering (SSR),
 });
 
 const myCustomTheme = {
@@ -67,8 +68,10 @@ const myCustomTheme = {
         connectButtonText: '#FFF',
         connectButtonTextError: '#FFF',
         connectionIndicator: '#30E000',
-        downloadBottomCardBackground: 'linear-gradient(126deg, rgba(0, 0, 0, 0) 9.49%, rgba(120, 120, 120, 0.2) 71.04%), #1A1B1F',
-        downloadTopCardBackground: 'linear-gradient(126deg, rgba(120, 120, 120, 0.2) 9.49%, rgba(0, 0, 0, 0) 71.04%), #1A1B1F',
+        downloadBottomCardBackground:
+            'linear-gradient(126deg, rgba(0, 0, 0, 0) 9.49%, rgba(120, 120, 120, 0.2) 71.04%), #1A1B1F',
+        downloadTopCardBackground:
+            'linear-gradient(126deg, rgba(120, 120, 120, 0.2) 9.49%, rgba(0, 0, 0, 0) 71.04%), #1A1B1F',
         error: '#FF494A',
         generalBorder: 'rgba(255, 255, 255, 0.08)',
         generalBorderDim: 'rgba(255, 255, 255, 0.04)',
@@ -215,7 +218,11 @@ function MyApp({ Component, pageProps }: AppProps) {
                                                             {title}
                                                         </Text>
                                                         {description && description != 'undefined' && (
-                                                            <Text fontFamily={'Aux'} fontSize='0.8rem' fontWeight='300' color={colors.offWhite}>
+                                                            <Text
+                                                                fontFamily={'Aux'}
+                                                                fontSize='0.8rem'
+                                                                fontWeight='300'
+                                                                color={colors.offWhite}>
                                                                 {description}
                                                             </Text>
                                                         )}
@@ -239,6 +246,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                                     </ToastBar>
                                 )}
                             </Toaster>
+                            <ReactQueryDevtools initialIsOpen={false} />
                         </ContractDataProvider>
                     </ChakraProvider>
                 </RainbowKitProvider>
