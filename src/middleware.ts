@@ -1,7 +1,7 @@
 import { geolocation } from '@vercel/functions';
 import { type NextRequest, NextResponse } from 'next/server';
 
-const BLOCKED_COUNTRIES = ['SE'];
+const BLOCKED_COUNTRIES = ['SE', 'CA'];
 
 export const config = {
     matcher: ['/', '/activity'],
@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
     console.log(`Visitor from ${country}`);
 
     if (BLOCKED_COUNTRIES.includes(country)) {
-        req.nextUrl.pathname = '/blocked-page';
+        req.nextUrl.pathname = '/restricted';
     }
 
     // Rewrite to URL
